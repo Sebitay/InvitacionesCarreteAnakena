@@ -17,18 +17,9 @@ def leer_nombres_csv(archivo_csv):
         return []
 
 # Leer nombres desde CSV o usar lista manual
-nombres = leer_nombres_csv('invitados.csv')
+archivo = leer_nombres_csv('invitados.csv')
 
-# Si no existe el CSV, usar lista manual
-if not nombres:
-    nombres = [
-        "Sebastián Valenzuela",  # El ejemplo de tu imagen
-        "Juan Pérez",
-        "María González", 
-        "Carlos Rodríguez"
-    ]
-
-def crear_invitacion(nombre, template_path="sin_nombre.png", output_dir="invitaciones"):
+def crear_invitacion(nombre, template_path="invitacion.png", output_dir="images"):
     """Crea una invitación individual"""
     
     # Crear directorio de salida
@@ -40,7 +31,6 @@ def crear_invitacion(nombre, template_path="sin_nombre.png", output_dir="invitac
     
     # Configurar fuente
     TAMANO_FUENTE = 100
-    # Intenta usar EB Garamond Bold
     font = ImageFont.truetype("EBGaramond-Bold.ttf", TAMANO_FUENTE)
     
     # Calcular posición centrada
@@ -55,14 +45,16 @@ def crear_invitacion(nombre, template_path="sin_nombre.png", output_dir="invitac
     draw.text((x, y), nombre, fill="white", font=font)
     
     # Guardar
-    filename = f"invitacion_{nombre.replace(' ', '_').replace('.', '')}.png"
+
+    filename = f"invitacion_{nombre.replace(' ', '_')}.png"
     output_path = os.path.join(output_dir, filename)
     img.save(output_path)
     print(f"Creada: {filename}")
 
 # Generar todas las invitaciones
 print("Generando invitaciones...")
-for nombre in nombres:
+for linea in archivo:
+    nombre, telegram = linea.strip().split(',')
     crear_invitacion(nombre)
 
-print(f"¡Completado! {len(nombres)} invitaciones generadas.")
+print(f"¡Completado! {len(archivo)} invitaciones generadas.")
